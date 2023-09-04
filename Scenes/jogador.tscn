@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3 uid="uid://cgusubhi0pvwr"]
+
+[ext_resource type="Texture2D" uid="uid://duplnvoqbbm6k" path="res://Assets/cyclops.png" id="1_mpdsv"]
+[ext_resource type="Script" path="res://Scripts/jogador.gd" id="1_y6kg8"]
+[ext_resource type="PackedScene" uid="uid://bik6ikft1ly11" path="res://Scenes/bala.tscn" id="2_mcnt8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bhauc"]
+
+[sub_resource type="Animation" id="Animation_g0rjq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_s8yl0"]
+resource_name = "dano"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.822008, 0.000104299, 0.191288, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g0svw"]
+_data = {
+"RESET": SubResource("Animation_g0rjq"),
+"dano": SubResource("Animation_s8yl0")
+}
+
+[node name="Jogador" type="Area2D"]
+scale = Vector2(1.2, 1.2)
+script = ExtResource("1_y6kg8")
+bala = ExtResource("2_mcnt8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_mpdsv")
+
+[node name="Jogador" type="CollisionShape2D" parent="."]
+scale = Vector2(3, 3)
+shape = SubResource("RectangleShape2D_bhauc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_g0svw")
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
+position_smoothing_enabled = true
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, 5)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
